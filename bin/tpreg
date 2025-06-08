@@ -1,0 +1,29 @@
+#!/bin/python3
+import sys
+import os
+
+locations = []
+def lookUp(name,all_aliases=False,starts_with=False):
+    aliases,ck=[],lambda x:(x==name)|starts_with&x.startswith(name)
+    return sum(filter(len,[[y for y in x[1]if ck(y)]for x in locations]),[])if all_aliases else next((x for x in locations if any([y for y in x[1]if ck(y)])),[])
+def addBind(path, *binds):locations.append([path.rstrip('/')+'/', [*binds]])
+def addRel(rel, subdir, *binds):addBind(lookUp(rel)[0]+subdir,*binds)
+
+addBind('/media/ian/Storage', 'storage')
+addRel('storage', 'Projects', 'projects', 'project')
+addRel('projects', 'cpp-projects', 'cpp-projects', 'cpp-project', 'cpp')
+addRel('cpp-projects', 'Camera Intrinsics Webpage', 'website', 'site', 'www')
+addBind('/home/ian', 'home', 'me')
+addRel('home', 'Documents', 'document', 'docs', 'doc')
+addRel('home', 'Downloads', 'download', 'down')
+addRel('home', 'programs', 'programs', 'program', 'prog', 'bin')
+
+if __name__ == "__main__":
+    compl=os.getenv('COMP_LINE','');args,cond,cond2=compl.split()[1:]if compl else sys.argv[1:],compl>'',0
+    if len(args):
+        arg=args[0];locs=lookUp(arg,cond,cond);cond2=locs!=[]
+        print('\n'.join(locs)if cond&cond2 and locs[0]!=arg else ''if cond else locs[0]if cond2 else'No waypoint set for '+arg)
+    else:
+        w=max(len(x[0])for x in locations)
+        print(*sum([x[1]for x in locations],[])if cond else map(lambda x:f'{x[0]:<{w}} : {", ".join(x[1])}',locations),sep='\n')
+    exit(cond|1-cond2)
