@@ -12,6 +12,8 @@ if [ "$1" == "install" ]; then
     mkdir -pv "$BIN_DIR"
     cp -v "$SCRIPT_DIR/scripts/*" "$CONFIG_DIR/"
     cp -v "$SCRIPT_DIR/bin/*" "$BIN_DIR/"
+    chmod +x -R "$CONFIG_DIR"
+    chmod +x -R "$BIN_DIR"
     if ! grep -q "$BASHRC_ENTRY" "$SOURCE_FILE"; then
         echo Adding bashrc entry
         echo -e "\n\n$BASHRC_ENTRY" >> "$SOURCE_FILE"
