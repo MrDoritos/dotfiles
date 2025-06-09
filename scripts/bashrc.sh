@@ -3,7 +3,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
 # Load our scripts
-if [ -f "$SCRIPT_DIR/bash_vars.sh"]; then
+if [ -f "$SCRIPT_DIR/bash_vars.sh" ]; then
     . "$SCRIPT_DIR/bash_vars.sh"
 fi
 if [ -f "$SCRIPT_DIR/bash_completion.sh" ]; then
@@ -21,3 +21,8 @@ export HISTCONTROL=ignoreboth
 
 # Waypoint config location
 export WAYPOINT_CONFIG="$DOTFILE_CONFIG_DIR/waypoints.conf"
+
+# Check PATH contains our bin dir
+if [[ ":$PATH:" != *":$DOTFILE_BIN_DIR:"* ]]; then
+	export PATH="$PATH:$DOTFILE_BIN_DIR"
+fi
