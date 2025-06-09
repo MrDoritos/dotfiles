@@ -11,9 +11,11 @@ if [ "$1" == "install" ]; then
     mkdir -pv "$CONFIG_DIR"
     mkdir -pv "$BIN_DIR"
     cp -v "$SCRIPT_DIR/scripts/*" "$CONFIG_DIR/"
+    cp -vn "$SCRIPT_DIR/config/*" "$CONFIG_DIR/"
     cp -v "$SCRIPT_DIR/bin/*" "$BIN_DIR/"
     chmod +x -R "$CONFIG_DIR"
     chmod +x -R "$BIN_DIR"
+    echo "export DOTFILE_CONFIG_DIR=\"$CONFIG_DIR\"" >> "$CONFIG_DIR/bash_vars.sh"
     if ! grep -q "$BASHRC_ENTRY" "$SOURCE_FILE"; then
         echo Adding bashrc entry
         echo -e "\n\n$BASHRC_ENTRY" >> "$SOURCE_FILE"
